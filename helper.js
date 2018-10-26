@@ -75,7 +75,7 @@ LONG_NAMES = {
 	"mal:pubsubIP" : "Pub-Sub",
 	// COM
 	"com:events" : "Events",
-	// "com:objects" : "Objects",
+	"com:objects" : "Objects",
 	// Others
 	"mal:dataTypes" : "Data",
 
@@ -114,12 +114,13 @@ OMMITED_NODE_TYPES = [ "mal:specification", "mal:capabilitySet", "mal:documentat
 		"mal:item", "mal:type", "mal:extends", "mal:field", "mal:extraInformation",
 		// IP related
 		"mal:invoke", "mal:acknowledgement", "mal:response", "mal:request", "mal:progress", "mal:update", "mal:submit",
-		"mal:publishNotify",
+		"mal:publishNotify"
 // COM related
-// "com:events",
+ ,"com:object","com:event"
+ ,"com:objectType","com:sourceObject","com:relatedObject"
 ]
 
-OMMITED_TYPE_NAME_IN_TREE = [ "mal:area", "mal:service", "mal:composite", "mal:error", ]
+OMMITED_TYPE_NAME_IN_TREE = [ "mal:area", "mal:service", "mal:fundamental", "mal:attribute", "mal:composite", "mal:error", ]
 
 TAG_TO_ICON = {
 	"unknown" : "fff/asterisk_yellow.png",
@@ -237,10 +238,43 @@ function str_com_type(type, path_prefix) {
 	return str_type(type,path_prefix,"number")
 }
 
-
-function str_type(type, path_prefix,id_type) {
-	path_prefix = (typeof path_prefix == 'undefined') ? "Data/" : path_prefix
+function create_type_annotation(type_str, path_str, is_list) {
 	var type_annotation = document.createElement("a")
+	type_annotation.setAttribute("id", "type_" + gen_suffix())
+	type_annotation.innerHTML = type_str
+
+	// cannot access here, because the element has not yet been added to the
+	// document, so it uses the post_draw
+	post_draw.push(function() {
+		var t_ann = $("#" + type_annotation.getAttribute("id"))
+		if (tree.nodeMap[path_str]) {
+			t_ann.addClass("link")
+			var xml_node = tree.nodeMap[path_str].xml_node
+
+			t_ann.hover(function() {
+				hoverInToMiniview(xml_node, t_ann)
+			}, function() {
+				hoverOutOfMiniview(xml_node, t_ann)
+			})
+
+			t_ann.click(function() {
+				hoverOutOfMiniview(xml_node, t_ann)
+				tree.selectNodeFromPath(path_str)
+			})
+		}else{
+		//	t_ann.addClass("error")
+		}
+	})
+
+	if (is_list == "true") {
+		return "List&lt;" + type_annotation.outerHTML + "&gt; "
+	} else {
+		return type_annotation.outerHTML
+	}
+}
+
+function str_type(type, path_prefix, id_type) {
+	path_prefix = (typeof path_prefix == 'undefined') ? "Data/" : path_prefix
 	var type_str = ""
 	var path_str = ""
 
@@ -270,39 +304,7 @@ function str_type(type, path_prefix,id_type) {
 		if (type_str.indexOf(service_prefix) == 0)
 			type_str = type_str.slice(type_str.indexOf(service_prefix) + service_prefix.length)
 	}
-
-
-	type_annotation.setAttribute("id", "type_" + gen_suffix())
-	type_annotation.innerHTML = type_str
-
-	// cannot access here, because the element has not yet been added to the
-	// document, so it uses the post_draw
-	post_draw.push(function() {
-		var t_ann = $("#" + type_annotation.getAttribute("id"))
-		if (tree.nodeMap[path_str]) {
-			t_ann.addClass("link")
-			var xml_node = tree.nodeMap[path_str].xml_node
-
-			t_ann.hover(function() {
-				hoverInToMiniview(xml_node, t_ann)
-			}, function() {
-				hoverOutOfMiniview(xml_node, t_ann)
-			})
-
-			t_ann.click(function() {
-				hoverOutOfMiniview(xml_node, t_ann)
-				tree.selectNodeFromPath(path_str)
-			})
-		}else{
-		//	t_ann.addClass("error")
-		}
-	})
-
-	if (type.getAttribute("list") == "true") {
-		return "List&lt;" + type_annotation.outerHTML + "&gt; "
-	} else {
-		return type_annotation.outerHTML
-	}
+	return create_type_annotation(type_str, path_str, type.getAttribute("list"))
 }
 
 function str_mal_field(node) {
@@ -404,7 +406,7 @@ function onNodeSelect(tree_node) {
 		var stateObj = {};
 		history.pushState(stateObj, tree_node.path, "?u=" + tree_node.path);
 	}
-	
+
 	drawer_func(xml_node);
 	draw_errors(xml_node);
 	draw_documentation(xml_node);
