@@ -412,6 +412,7 @@ function onNodeSelect(tree_node) {
 		var stateObj = {};
 		history.pushState(stateObj, tree_node.data.path, "?u=" + tree_node.data.path);
 	}
+	document.title = tree_node.data.path + " - MO Web Viewer";
 
 	drawer_func(xml_node);
 	draw_errors(xml_node);
