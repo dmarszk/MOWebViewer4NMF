@@ -150,6 +150,10 @@ TAG_TO_ICON = {
 	"com:event": "fff/bell.png",
 	"com:object": "fff/database.png",
 	"com:objects": "fff/page_white_database.png",
+
+	//pdf
+	"book": "fff/book.png",
+	"book_red": "fff/book_red.png",
 }
 
 function iconPath(tag) {
@@ -408,6 +412,7 @@ function onNodeSelect(tree_node) {
 		var stateObj = {};
 		history.pushState(stateObj, tree_node.data.path, "?u=" + tree_node.data.path);
 	}
+	document.title = tree_node.data.path + " - MO Web Viewer";
 
 	drawer_func(xml_node);
 	draw_errors(xml_node);
