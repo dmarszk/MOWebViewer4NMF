@@ -10,6 +10,7 @@
 var configServiceDefFiles = [
 	"xml/ServiceDefMAL.xml",
 	"xml/ServiceDefCOM_NMF.xml",
+	"xml/ServiceDefCommon.xml",
 	"xml/ServiceDefMC.xml",
 	"xml/ServiceDefPLATFORM.xml",
 	"xml/ServiceDefSM.xml",
