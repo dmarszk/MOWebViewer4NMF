@@ -8,12 +8,12 @@
 	The files shall be listed in dependency order (i.e. MAL spec comes first).
 */
 var configServiceDefFiles = [
-	"xml/ServiceDefMAL.xml",
-	"xml/ServiceDefCOM_NMF.xml",
+	"https://raw.githubusercontent.com/esa/nanosat-mo-framework/dev/core/mo-services-xml/src/main/resources/xml/ServiceDefMAL.xml",
+	"https://raw.githubusercontent.com/esa/nanosat-mo-framework/dev/core/mo-services-xml/src/main/resources/xml/ServiceDefCOM-nmf.xml",
 	"xml/ServiceDefCommon.xml",
 	"xml/ServiceDefMC.xml",
-	"xml/ServiceDefPLATFORM.xml",
-	"xml/ServiceDefSM.xml",
+	"https://raw.githubusercontent.com/esa/nanosat-mo-framework/dev/core/mo-services-xml/src/main/resources/xml/ServiceDefPLATFORM.xml",
+	"https://raw.githubusercontent.com/esa/nanosat-mo-framework/dev/core/mo-services-xml/src/main/resources/xml/ServiceDefSM.xml",
 ];
 
 var configServiceBookFiles = {
